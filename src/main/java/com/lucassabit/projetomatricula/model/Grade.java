@@ -8,6 +8,13 @@ import javax.persistence.ManyToOne;
 
 import com.lucassabit.projetomatricula.dto.client.Subject.ChangeGradesDTO;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Grade {
     @Id
@@ -24,9 +31,6 @@ public class Grade {
     private double nota_parcial_2;
     private double nota_final;
 
-    public Grade() {
-    }
-
     public Grade(Subject subject, Student student) {
         this.subject = subject;
         this.student = student;
@@ -41,49 +45,5 @@ public class Grade {
         this.nota_final = dto.getFinal_grade() != null ? dto.getFinal_grade() : 0;
 
         return this;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public double getNota_parcial_1() {
-        return nota_parcial_1;
-    }
-
-    public void setNota_parcial_1(double nota_parcial_1) {
-        this.nota_parcial_1 = nota_parcial_1;
-    }
-
-    public double getNota_parcial_2() {
-        return nota_parcial_2;
-    }
-
-    public void setNota_parcial_2(double nota_parcial_2) {
-        this.nota_parcial_2 = nota_parcial_2;
-    }
-
-    public double getNota_final() {
-        return nota_final;
-    }
-
-    public void setNota_final(double nota_final) {
-        this.nota_final = nota_final;
-    }
-
-    public Integer getId() {
-        return id;
     }
 }

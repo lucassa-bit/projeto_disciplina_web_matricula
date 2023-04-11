@@ -4,9 +4,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@Data
 public class UserCreateDTO {
     @NotBlank(message = "Erro na criação do usuario: valor em branco/nulo (nome)")
     protected String name;
@@ -28,32 +31,4 @@ public class UserCreateDTO {
     @NotBlank(message = "Erro na criação do usuario: valor em branco/nulo (data de nascimento)")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     protected String birthDate;
-
-    public UserCreateDTO() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getId_number() {
-        return id_number;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
 }

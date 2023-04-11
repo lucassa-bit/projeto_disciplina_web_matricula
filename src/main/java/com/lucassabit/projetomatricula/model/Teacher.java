@@ -10,14 +10,19 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.lucassabit.projetomatricula.dto.client.SubjectParticipants.SubjectParticipantsCreateDTO;
 import com.lucassabit.projetomatricula.dto.client.SubjectParticipants.SubjectParticipantsEditDTO;
 import com.lucassabit.projetomatricula.dto.send.SubjectParticipantsSendDTO;
 import com.lucassabit.projetomatricula.enumerators.UserType;
 import com.lucassabit.projetomatricula.error.login.EncodingPasswordException;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @DiscriminatorValue(value = "T")
 public class Teacher extends UserParent {
@@ -28,23 +33,19 @@ public class Teacher extends UserParent {
     private Course course;
     private String registerCode;
 
-    public Teacher() {
-    }
-
     public Teacher(String name, String email, String id_number, String login, String password, UserType userType,
-            LocalDate birthDate, PasswordEncoder pEncoder, Course course) {
-        super(name, email, id_number, login, password, userType, birthDate, pEncoder);
+            LocalDate birthDate, Course course) {
+        super(name, email, id_number, login, password, userType, birthDate);
         this.course = course;
     }
 
-    public static Teacher fromCreateDto(SubjectParticipantsCreateDTO dto, Course course, PasswordEncoder pEncoder)
+    public static Teacher fromCreateDto(SubjectParticipantsCreateDTO dto, Course course)
             throws EncodingPasswordException {
         return new Teacher(dto.getName(), dto.getEmail(), dto.getId_number(), dto.getLogin(), dto.getPassword(),
-                UserType.TEACHER, LocalDate.parse(dto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                pEncoder, course);
+                UserType.TEACHER, LocalDate.parse(dto.getBirthDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")), course);
     }
 
-    public Teacher fromEditDto(SubjectParticipantsEditDTO dto, Course course, PasswordEncoder pEncoder) {
+    public Teacher fromEditDto(SubjectParticipantsEditDTO dto, Course course) {
         if (dto.getName() != null)
             this.name = dto.getName();
         if (dto.getBirthDate() != null)
@@ -55,41 +56,18 @@ public class Teacher extends UserParent {
             this.email = dto.getEmail();
         if (dto.getId_number() != null)
             this.id_number = dto.getId_number();
-        if (dto.getlogin() != null)
-            this.login = dto.getlogin();
+        if (dto.getLogin() != null)
+            this.login = dto.getLogin();
         if (dto.getPassword() != null)
-            setPassword(password, pEncoder);
+            this.password = dto.getPassword();
 
         return this;
     }
 
     public SubjectParticipantsSendDTO toSendDTO() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return new SubjectParticipantsSendDTO(id, name, email, id_number, login, password, userType, birthDate.format(format), course,
+        return new SubjectParticipantsSendDTO(id, name, email, id_number, login, password, userType,
+                birthDate.format(format), course.getName(),
                 registerCode);
-    }
-
-    public String getRegistration() {
-        return registerCode;
-    }
-
-    public void setRegistration(String registerCode) {
-        this.registerCode = registerCode;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
     }
 }

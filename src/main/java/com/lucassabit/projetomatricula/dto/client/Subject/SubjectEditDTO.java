@@ -6,6 +6,9 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+
+@Data
 public class SubjectEditDTO {
     @NotNull(message = "Erro na criação da disciplina: valor em branco/nulo (id)")
     private Integer id;
@@ -26,35 +29,4 @@ public class SubjectEditDTO {
     @NotBlank(message = "Erro na criação da disciplina: valor em branco/nulo (horario aula)")
     @DateTimeFormat(pattern = "HH:mm")
     private String classTime2;
-
-    public SubjectEditDTO() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public String getDayWeek1() {
-        return dayWeek1;
-    }
-
-    public String getClassTime1() {
-        return classTime1;
-    }
-
-    public String getClassTime2() {
-        return classTime2;
-    }
-
-    public String getDayWeek2() {
-        return dayWeek2;
-    }
 }

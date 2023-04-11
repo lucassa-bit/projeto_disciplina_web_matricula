@@ -1,6 +1,6 @@
 package com.lucassabit.projetomatricula.dto.send;
 
-public class SubjectStudentSendDTO {
+public class StudentSubjectSendDTO {
     private Integer id;
 
     private String name;
@@ -18,7 +18,7 @@ public class SubjectStudentSendDTO {
     private Double grade_2;
     private Double final_grade;
 
-    public SubjectStudentSendDTO(Integer id, String name, String teacher, SubjectParticipantsSendDTO student,
+    public StudentSubjectSendDTO(Integer id, String name, String teacher, SubjectParticipantsSendDTO student,
             String course, String registerCode, String dayWeek1, String classTime1, String dayWeek2, String classTime2,
             Double grade_1, Double grade_2, Double final_grade) {
         this.id = id;

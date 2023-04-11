@@ -2,6 +2,9 @@ package com.lucassabit.projetomatricula.dto.send;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class SubjectSendDTO {
     private Integer id;
     private String name;
@@ -27,45 +30,5 @@ public class SubjectSendDTO {
         this.classTime1 = classTime1;
         this.dayWeek2 = dayWeek2;
         this.classTime2 = classTime2;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public List<SubjectParticipantsSendDTO> getStudents() {
-        return students;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public String getRegisterCode() {
-        return registerCode;
-    }
-
-    public String getDayWeek1() {
-        return dayWeek1;
-    }
-
-    public String getClassTime1() {
-        return classTime1;
-    }
-
-    public String getDayWeek2() {
-        return dayWeek2;
-    }
-
-    public String getClassTime2() {
-        return classTime2;
     }
 }

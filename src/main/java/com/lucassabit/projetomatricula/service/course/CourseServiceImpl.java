@@ -3,6 +3,7 @@ package com.lucassabit.projetomatricula.service.course;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,17 +33,19 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private SubjectRepository sbRepository;
 
+    private ModelMapper modelMapper;
+
     @Override
     public void CreateNewCourse(CourseCreateDTO dto) throws CourseAlreadyExistsException {
         if (cRepository.existsByName(dto.getName()))
             throw new CourseAlreadyExistsException(dto.getName());
 
-        cRepository.save(Course.fromCreateDto(dto));
+        cRepository.save(new Course(dto.getName()));
     }
 
     @Override
     public List<CourseSendDTO> getAllCourses() {
-        return cRepository.findAll().parallelStream().map((value) -> value.toSendDTO())
+        return cRepository.findAll().parallelStream().map((value) -> modelMapper.map(value, CourseSendDTO.class))
                 .sorted((a, b) -> compareName(a.getName(), b.getName())).toList();
     }
 
@@ -55,7 +58,8 @@ public class CourseServiceImpl implements CourseService {
         if (cRepository.existsByName(dto.getName()))
             throw new CourseAlreadyExistsException(dto.getName());
 
-        cRepository.save(value.get().fromEditDto(dto));
+        value.get().setName(dto.getName());
+        cRepository.save(value.get());
     }
 
     @Override

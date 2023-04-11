@@ -23,7 +23,7 @@ import com.lucassabit.projetomatricula.dto.client.Subject.RegisterSubjectsDTO;
 import com.lucassabit.projetomatricula.dto.client.Subject.SubjectCreateDTO;
 import com.lucassabit.projetomatricula.dto.client.Subject.SubjectEditDTO;
 import com.lucassabit.projetomatricula.dto.send.SubjectSendDTO;
-import com.lucassabit.projetomatricula.dto.send.SubjectStudentSendDTO;
+import com.lucassabit.projetomatricula.dto.send.StudentSubjectSendDTO;
 import com.lucassabit.projetomatricula.enumerators.UserType;
 import com.lucassabit.projetomatricula.error.AccessDeniedException;
 import com.lucassabit.projetomatricula.error.course.CourseDoesntExistException;
@@ -35,6 +35,8 @@ import com.lucassabit.projetomatricula.error.subject.StudentIsNotRegisteredInSub
 import com.lucassabit.projetomatricula.error.subject.SubjectDoesntExistException;
 import com.lucassabit.projetomatricula.service.login.PermissionsVerifyService;
 import com.lucassabit.projetomatricula.service.subject.SubjectService;
+
+import io.swagger.annotations.ApiOperation;
 
 import org.springframework.security.core.Authentication;
 
@@ -54,6 +56,7 @@ public class SubjectController {
 
         @PostMapping
         @ResponseStatus(code = HttpStatus.CREATED)
+        @ApiOperation(value = "Cria nova disciplina")
         public ResponseEntity<String> createNewSubject(Authentication authentication,
                         @Valid @RequestBody SubjectCreateDTO dto)
                         throws TeacherNotFoundException, CourseDoesntExistException, UserDoestExistException,
@@ -69,6 +72,7 @@ public class SubjectController {
         }
 
         @GetMapping
+        @ApiOperation(value = "Pega todas as disciplinas cadastradas no sistema")
         public List<SubjectSendDTO> getAllSubjects(Authentication authentication, @RequestParam String course)
                         throws UserDoestExistException, AccessDeniedException, DoesntExistUserTypeException {
                 List<UserType> cargosPermitidos = Arrays
@@ -79,7 +83,8 @@ public class SubjectController {
         }
 
         @GetMapping("/findByStudent")
-        public List<SubjectStudentSendDTO> getStudentSubjects(Authentication authentication,
+        @ApiOperation(value = "Busca as disciplinas de determinado estudante")
+        public List<StudentSubjectSendDTO> getStudentSubjects(Authentication authentication,
                         @RequestParam String registrationCode)
                         throws StudentNotFoundException, UserDoestExistException, AccessDeniedException,
                         DoesntExistUserTypeException {
@@ -91,6 +96,7 @@ public class SubjectController {
         }
 
         @GetMapping("/findByTeacher")
+        @ApiOperation(value = "Busca as disciplinas de determinado professor")
         public List<SubjectSendDTO> getTeacherSubjects(Authentication authentication,
                         @RequestParam String registrationCode)
                         throws StudentNotFoundException, UserDoestExistException, AccessDeniedException,
@@ -103,6 +109,7 @@ public class SubjectController {
         }
 
         @PutMapping("/add")
+        @ApiOperation(value = "Adiciona estudantes a uma determinada disciplina")
         public ResponseEntity<String> addingStudent(Authentication authentication,
                         @Valid @RequestBody RegisterSubjectsDTO dto)
                         throws SubjectDoesntExistException, CourseDoesntExistException, TeacherNotFoundException,
@@ -118,6 +125,7 @@ public class SubjectController {
         }
 
         @PutMapping("/edit_grades")
+        @ApiOperation(value = "Altera as notas do estudante")
         public ResponseEntity<String> changingGrades(Authentication authentication,
                         @Valid @RequestBody List<ChangeGradesDTO> dto)
                         throws SubjectDoesntExistException, CourseDoesntExistException, TeacherNotFoundException,
@@ -135,6 +143,7 @@ public class SubjectController {
         }
 
         @PutMapping
+        @ApiOperation(value = "Edita as informações do curso")
         public ResponseEntity<String> editCourse(Authentication authentication, @Valid @RequestBody SubjectEditDTO dto)
                         throws SubjectDoesntExistException, CourseDoesntExistException, TeacherNotFoundException,
                         UserDoestExistException, AccessDeniedException, DoesntExistUserTypeException {
@@ -148,6 +157,7 @@ public class SubjectController {
         }
 
         @DeleteMapping
+        @ApiOperation(value = "Deleta o curso pelo seu id")
         public ResponseEntity<String> deleteCourse(Authentication authentication, @RequestParam int id)
                         throws SubjectDoesntExistException, UserDoestExistException, AccessDeniedException,
                         DoesntExistUserTypeException {

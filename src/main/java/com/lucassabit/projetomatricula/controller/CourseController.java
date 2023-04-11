@@ -30,6 +30,8 @@ import com.lucassabit.projetomatricula.error.login.UserDoestExistException;
 import com.lucassabit.projetomatricula.service.course.CourseService;
 import com.lucassabit.projetomatricula.service.login.PermissionsVerifyService;
 
+import io.swagger.annotations.ApiOperation;
+
 import javax.validation.Valid;
 
 @RestController
@@ -46,7 +48,8 @@ public class CourseController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity<String> createNewUsuario(Authentication authentication,
+    @ApiOperation(value = "Cria novo curso")
+    public ResponseEntity<String> createNewCourse(Authentication authentication,
             @Valid @RequestBody CourseCreateDTO dto)
             throws CourseAlreadyExistsException, UserDoestExistException, DoesntExistUserTypeException,
             AccessDeniedException {
@@ -59,11 +62,13 @@ public class CourseController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Busca todos os cursos cadastrados no sistema")
     public List<CourseSendDTO> getAllCourses() {
         return cService.getAllCourses();
     }
 
     @PutMapping
+    @ApiOperation(value = "Edita determinado curso")
     public ResponseEntity<String> editCourse(Authentication authentication, @Valid @RequestBody CourseEditDTO dto)
             throws CourseAlreadyExistsException, CourseDoesntExistException, UserDoestExistException,
             AccessDeniedException, DoesntExistUserTypeException {
@@ -76,6 +81,7 @@ public class CourseController {
     }
 
     @DeleteMapping
+    @ApiOperation(value = "Deleta curso a partir do seu id")
     public ResponseEntity<String> deleteCourse(Authentication authentication, @RequestParam int id)
             throws CourseDoesntExistException, AccessDeniedException, UserDoestExistException,
             DoesntExistUserTypeException {

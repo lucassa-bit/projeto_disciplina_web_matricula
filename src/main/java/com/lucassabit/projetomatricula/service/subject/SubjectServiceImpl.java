@@ -11,7 +11,7 @@ import com.lucassabit.projetomatricula.dto.client.Subject.RegisterSubjectsDTO;
 import com.lucassabit.projetomatricula.dto.client.Subject.SubjectCreateDTO;
 import com.lucassabit.projetomatricula.dto.client.Subject.SubjectEditDTO;
 import com.lucassabit.projetomatricula.dto.send.SubjectSendDTO;
-import com.lucassabit.projetomatricula.dto.send.SubjectStudentSendDTO;
+import com.lucassabit.projetomatricula.dto.send.StudentSubjectSendDTO;
 import com.lucassabit.projetomatricula.error.course.CourseDoesntExistException;
 import com.lucassabit.projetomatricula.error.login.StudentNotFoundException;
 import com.lucassabit.projetomatricula.error.login.TeacherNotFoundException;
@@ -78,7 +78,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<SubjectStudentSendDTO> getSubjectFromStudent(String registrationCodeStudent)
+    public List<StudentSubjectSendDTO> getSubjectFromStudent(String registrationCodeStudent)
             throws StudentNotFoundException {
         Optional<Student> student = stRepository.findByRegisterCode(registrationCodeStudent);
 

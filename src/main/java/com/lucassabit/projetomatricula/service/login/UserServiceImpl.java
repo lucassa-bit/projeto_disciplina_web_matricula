@@ -62,7 +62,8 @@ public class UserServiceImpl implements UserService {
             throw new LoginAlreadyExistsException(dto.getLogin());
         }
 
-        scRepository.save(Secretary.fromCreateDto(dto, pEncoder));
+        dto.setPassword(pEncoder.encode(dto.getPassword()));
+        scRepository.save(Secretary.fromCreateDto(dto));
     }
 
     @Override
@@ -76,6 +77,9 @@ public class UserServiceImpl implements UserService {
         if (gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getLogin())) {
             throw new LoginAlreadyExistsException(dto.getLogin());
         }
+
+        dto.setPassword(pEncoder.encode(dto.getPassword()));
+
         LocalDate today = LocalDate.now();
         int id = course.get().getId();
 
@@ -85,17 +89,17 @@ public class UserServiceImpl implements UserService {
 
         switch (userType) {
             case STUDENT:
-                Student saveStudent = sRepository.save(Student.fromCreateDto(dto, course.get(), pEncoder));
+                Student saveStudent = sRepository.save(Student.fromCreateDto(dto, course.get()));
                 int idStudent = saveStudent.getId();
-                saveStudent.setRegistration(registerCode + formatId(idStudent));
+                saveStudent.setRegisterCode(registerCode + formatId(idStudent));
                 saveStudent = sRepository.save(saveStudent);
                 course.get().getStudents().add(saveStudent);
                 cRepository.save(course.get());
                 break;
             case TEACHER:
-                Teacher saveTeacher = tRepository.save(Teacher.fromCreateDto(dto, course.get(), pEncoder));
+                Teacher saveTeacher = tRepository.save(Teacher.fromCreateDto(dto, course.get()));
                 int idTeacher = saveTeacher.getId();
-                saveTeacher.setRegistration(registerCode + formatId(idTeacher));
+                saveTeacher.setRegisterCode(registerCode + formatId(idTeacher));
                 tRepository.save(saveTeacher);
                 course.get().getTeachers().add(saveTeacher);
                 cRepository.save(course.get());
@@ -133,10 +137,10 @@ public class UserServiceImpl implements UserService {
 
         if (!user.isPresent())
             throw new UserDoestExistException(dto.getName());
-        if (dto.getlogin() != null && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getlogin()))
-            throw new LoginAlreadyExistsException(dto.getlogin());
+        if (dto.getLogin() != null && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getLogin()))
+            throw new LoginAlreadyExistsException(dto.getLogin());
 
-        scRepository.save(user.get().fromEditDto(dto, pEncoder));
+        scRepository.save(user.get().fromEditDto(dto));
     }
 
     @Override
@@ -154,14 +158,14 @@ public class UserServiceImpl implements UserService {
 
                 if (!user.isPresent())
                     throw new UserDoestExistException(dto.getName());
-                if (!user.get().getLogin().equals(dto.getlogin())
-                        && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getlogin()))
-                    throw new LoginAlreadyExistsException(dto.getlogin());
+                if (!user.get().getLogin().equals(dto.getLogin())
+                        && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getLogin()))
+                    throw new LoginAlreadyExistsException(dto.getLogin());
 
                 if (user.get().getCourse().getId() != course.get().getId()) {
                     user.get().getCourse().getStudents().remove(user.get());
 
-                    Student save = sRepository.save(user.get().fromEditDto(dto, course.get(), pEncoder));
+                    Student save = sRepository.save(user.get().fromEditDto(dto, course.get()));
                     course.get().getStudents().add(save);
 
                     for (Grade grade : save.getSubjects()) {
@@ -177,7 +181,7 @@ public class UserServiceImpl implements UserService {
                     cRepository.save(course.get());
                     sRepository.save(save);
                 } else {
-                    sRepository.save(user.get().fromEditDto(dto, course.get(), pEncoder));
+                    sRepository.save(user.get().fromEditDto(dto, course.get()));
                 }
                 break;
             }
@@ -186,13 +190,13 @@ public class UserServiceImpl implements UserService {
 
                 if (!user.isPresent())
                     throw new UserDoestExistException(dto.getName());
-                if (!user.get().getLogin().equals(dto.getlogin())
-                        && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getlogin()))
-                    throw new LoginAlreadyExistsException(dto.getlogin());
+                if (!user.get().getLogin().equals(dto.getLogin())
+                        && gRepository.existsByLoginIgnoreCaseOrderByNameAsc(dto.getLogin()))
+                    throw new LoginAlreadyExistsException(dto.getLogin());
                 if (user.get().getCourse().getId() != course.get().getId()) {
                     user.get().getCourse().getTeachers().remove(user.get());
 
-                    Teacher save = tRepository.save(user.get().fromEditDto(dto, course.get(), pEncoder));
+                    Teacher save = tRepository.save(user.get().fromEditDto(dto, course.get()));
                     course.get().getTeachers().add(save);
                     cRepository.save(course.get());
 
@@ -206,7 +210,7 @@ public class UserServiceImpl implements UserService {
                     cRepository.save(course.get());
                     tRepository.save(save);
                 } else {
-                    tRepository.save(user.get().fromEditDto(dto, course.get(), pEncoder));
+                    tRepository.save(user.get().fromEditDto(dto, course.get()));
                 }
                 break;
             }
@@ -269,7 +273,7 @@ public class UserServiceImpl implements UserService {
             }
             case TEACHER: {
                 Optional<Teacher> userTeacher = tRepository.findById(id);
-                Course course = user.get().getCourse();
+                Course course = userTeacher.get().getCourse();
                 course.getTeachers().remove(user.get());
                 cRepository.save(course);
 

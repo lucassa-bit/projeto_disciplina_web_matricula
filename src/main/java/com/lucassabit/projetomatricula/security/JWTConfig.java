@@ -27,12 +27,12 @@ public class JWTConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     public static final String[] PUBLIC_MATCHERS = {
-            "/api/**"
+            "/api/**", "/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**"
     };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
+        http.cors().and().csrf().disable().authorizeHttpRequests()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -55,7 +55,6 @@ public class JWTConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
         corsConfiguration.setExposedHeaders(Arrays.asList("x-auth-token", "xsrf-token", "Access-Control-Allow-Origin"));
-        
 
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
